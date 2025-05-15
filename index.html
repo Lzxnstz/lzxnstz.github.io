@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Papelitos 3B-Catalogo.</title>
+    <title>Papelitos 3B - Exhibición de Productos</title>
     <style>
-        /* Estilos generales */
         * {
             margin: 0;
             padding: 0;
@@ -25,7 +24,6 @@
             padding: 0 20px;
         }
         
-        /* Header */
         header {
             background-color: #b7ac9a;
             color: white;
@@ -68,7 +66,6 @@
             color: #f97350;
         }
         
-        /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1920x600');
             background-size: cover;
@@ -108,7 +105,6 @@
             background-color: #c0392b;
         }
         
-        /* Sección de productos destacados */
         .featured-products {
             padding: 80px 0;
         }
@@ -148,6 +144,7 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
         
         .product-card:hover {
@@ -193,8 +190,120 @@
             color: #e74c3c;
             margin-bottom: 15px;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .product-detail {
+            display: flex;
+            gap: 30px;
+        }
+
+        .product-detail-image {
+            flex: 1;
+        }
+
+        .product-detail-image img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .product-detail-info {
+            flex: 1;
+        }
+
+        .product-detail-info h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .product-detail-price {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .product-detail-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .product-detail-features {
+            margin-bottom: 20px;
+        }
+
+        .product-detail-features ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .product-detail-features li {
+            margin-bottom: 8px;
+        }
+
+        .quick-view {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(231, 76, 60, 0.9);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+
+        .product-card:hover .quick-view {
+            opacity: 1;
+        }
         
-        /* Sección de categorías */
         .categories {
             padding: 60px 0;
             background-color: #ecf0f1;
@@ -231,7 +340,6 @@
             color: #2c3e50;
         }
         
-        /* Footer */
         footer {
             background-color: #2c3e50;
             color: white;
@@ -291,7 +399,6 @@
             font-size: 14px;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -318,11 +425,20 @@
             .hero-content p {
                 font-size: 18px;
             }
+
+            .product-detail {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container header-content">
             <div class="logo">Papelitos<span>3B</span></div>
@@ -337,7 +453,6 @@
         </div>
     </header>
     
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container hero-content">
             <div>
@@ -348,7 +463,6 @@
         </div>
     </section>
     
-    <!-- Sección de productos destacados -->
     <section id="productos" class="featured-products">
         <div class="container">
             <div class="section-title">
@@ -356,21 +470,21 @@
             </div>
             
             <div class="products-grid">
-                <!-- Producto 1 -->
                 <div class="product-card">
+                    <button class="quick-view" onclick="openModal('modal1')">Vista rápida</button>
                     <div class="product-image">
                         <img src="https://www.klipp.co/wp-content/uploads/2024/12/33660-4-png.webp" alt="Producto 1">
                     </div>
                     <div class="product-info">
                         <h3>Boligrafos KLIPP</h3>
-                        <p> Un boligrafo perfecto para relatar tus sueños.</p>
+                        <p>Un boligrafo perfecto para relatar tus sueños.</p>
                         <div class="product-price">$1.200</div>
-                        <a href="#" class="btn">Ver Detalles</a>
+                        <a href="#" class="btn" onclick="openModal('modal1'); return false;">Ver Detalles</a>
                     </div>
                 </div>
                 
-                <!-- Producto 2 -->
                 <div class="product-card">
+                    <button class="quick-view" onclick="openModal('modal2')">Vista rápida</button>
                     <div class="product-image">
                         <img src="https://www.klipp.co/wp-content/uploads/2024/10/31249-1-1-600x600.png" alt="Producto 2">
                     </div>
@@ -378,12 +492,12 @@
                         <h3>Tajalapiz 1 servicio KLIPP</h3>
                         <p>Tajalapiz 1 servicio con contenedor de basura.</p>
                         <div class="product-price">$800</div>
-                        <a href="#" class="btn">Ver Detalles</a>
+                        <a href="#" class="btn" onclick="openModal('modal2'); return false;">Ver Detalles</a>
                     </div>
                 </div>
                 
-                <!-- Producto 3 -->
                 <div class="product-card">
+                    <button class="quick-view" onclick="openModal('modal3')">Vista rápida</button>
                     <div class="product-image">
                         <img src="https://www.papeleriacrearte.com/wp-content/uploads/2020/05/cartulinabristol.png" alt="Producto 3">
                     </div>
@@ -391,12 +505,12 @@
                         <h3>Cartulinas de colores</h3>
                         <p>Personaliza y dale color a tus exposiciones.</p>
                         <div class="product-price">$400 und</div>
-                        <a href="#" class="btn">Ver Detalles</a>
+                        <a href="#" class="btn" onclick="openModal('modal3'); return false;">Ver Detalles</a>
                     </div>
                 </div>
                 
-                <!-- Producto 4 -->
                 <div class="product-card">
+                    <button class="quick-view" onclick="openModal('modal4')">Vista rápida</button>
                     <div class="product-image">
                         <img src="https://static.compreloadomicilio.com/crayoling/products/07296/61d74ba99d53f914843334.webp" alt="Producto 4">
                     </div>
@@ -404,12 +518,12 @@
                         <h3>Portaminas 2.0 mm KLIPP</h3>
                         <p>Realiza tus trazos con presicion.</p>
                         <div class="product-price">$2.100</div>
-                        <a href="#" class="btn">Ver Detalles</a>
+                        <a href="#" class="btn" onclick="openModal('modal4'); return false;">Ver Detalles</a>
                     </div>
                 </div>
                 
-                <!-- Producto 5 -->
                 <div class="product-card">
+                    <button class="quick-view" onclick="openModal('modal5')">Vista rápida</button>
                     <div class="product-image">
                         <img src="https://www.klipp.co/wp-content/uploads/2024/12/31239-8-png.webp" alt="Producto 5">
                     </div>
@@ -417,12 +531,12 @@
                         <h3>Lapiz HB2</h3>
                         <p>Detrás de cada gran logro académico, siempre hay un lápiz que nunca se rindió.</p>
                         <div class="product-price">$1.000</div>
-                        <a href="#" class="btn">Ver Detalles</a>
+                        <a href="#" class="btn" onclick="openModal('modal5'); return false;">Ver Detalles</a>
                     </div>
                 </div>
                 
-                <!-- Producto 6 -->
                 <div class="product-card">
+                    <button class="quick-view" onclick="openModal('modal6')">Vista rápida</button>
                     <div class="product-image">
                         <img src="https://artecpanama.com/cdn/shop/products/milimetrada_1200x1200.jpg?v=1597676296" alt="Producto 6">
                     </div>
@@ -430,14 +544,181 @@
                         <h3>Hojas milimetradas</h3>
                         <p>Realiza tus planos con presición y facilidad.</p>
                         <div class="product-price">$200</div>
-                        <a href="#" class="btn">Ver Detalles</a>
+                        <a href="#" class="btn" onclick="openModal('modal6'); return false;">Ver Detalles</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     
-    <!-- Sección de categorías -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <div class="product-detail">
+                <div class="product-detail-image">
+                    <img src="https://www.klipp.co/wp-content/uploads/2024/12/33660-4-png.webp" alt="Boligrafos KLIPP">
+                </div>
+                <div class="product-detail-info">
+                    <h2>Boligrafos KLIPP</h2>
+                    <div class="product-detail-price">$1.200</div>
+                    <div class="product-detail-description">
+                        <p>Un bolígrafo perfecto para relatar tus sueños. Diseño ergonómico que se adapta perfectamente a tu mano, con tinta suave que fluye sin esfuerzo. Ideal para tomar apuntes, escribir cartas o plasmar tus ideas creativas.</p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h4>Características:</h4>
+                        <ul>
+                            <li>Tinta azul de secado rápido</li>
+                            <li>Punta de 1.0 mm para escritura suave</li>
+                            <li>Cuerpo de plástico resistente</li>
+                            <li>Diseño ergonómico antideslizante</li>
+                            <li>Disponible en varios colores</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <div class="product-detail">
+                <div class="product-detail-image">
+                    <img src="https://www.klipp.co/wp-content/uploads/2024/10/31249-1-1-600x600.png" alt="Tajalapiz 1 servicio KLIPP">
+                </div>
+                <div class="product-detail-info">
+                    <h2>Tajalapiz 1 servicio KLIPP</h2>
+                    <div class="product-detail-price">$800</div>
+                    <div class="product-detail-description">
+                        <p>Tajalápiz de 1 servicio con contenedor de basura incorporado. Mantén tu área de trabajo limpia mientras afilas tus lápices con este práctico tajalápiz.</p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h4>Características:</h4>
+                        <ul>
+                            <li>Contenedor integrado para los residuos</li>
+                            <li>Diseño compacto y portátil</li>
+                            <li>Hojas de acero de alta calidad</li>
+                            <li>Base antideslizante</li>
+                            <li>Fácil de vaciar y limpiar</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <div class="product-detail">
+                <div class="product-detail-image">
+                    <img src="https://www.papeleriacrearte.com/wp-content/uploads/2020/05/cartulinabristol.png" alt="Cartulinas de colores">
+                </div>
+                <div class="product-detail-info">
+                    <h2>Cartulinas de colores</h2>
+                    <div class="product-detail-price">$400 und</div>
+                    <div class="product-detail-description">
+                        <p>Personaliza y dale color a tus exposiciones con estas cartulinas de alta calidad. Perfectas para proyectos escolares, manualidades, decoración y más.</p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h4>Características:</h4>
+                        <ul>
+                            <li>Paquete de 10 unidades</li>
+                            <li>Variedad de colores vibrantes</li>
+                            <li>Superficie lisa ideal para escribir y pintar</li>
+                            <li>Gramaje de 180g/m² para mayor resistencia</li>
+                            <li>Tamaño estándar de 50x65 cm</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal4')">&times;</span>
+            <div class="product-detail">
+                <div class="product-detail-image">
+                    <img src="https://static.compreloadomicilio.com/crayoling/products/07296/61d74ba99d53f914843334.webp" alt="Portaminas 2.0 mm KLIPP">
+                </div>
+                <div class="product-detail-info">
+                    <h2>Portaminas 2.0 mm KLIPP</h2>
+                    <div class="product-detail-price">$2.100</div>
+                    <div class="product-detail-description">
+                        <p>Realiza tus trazos con precisión con este portaminas de alta calidad. Ideal para dibujo técnico, bosquejos y escritura diaria.</p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h4>Características:</h4>
+                        <ul>
+                            <li>Grosor de mina: 2.0 mm</li>
+                            <li>Mecanismo de avance suave</li>
+                            <li>Goma de borrar incorporada</li>
+                            <li>Cuerpo metálico resistente</li>
+                            <li>Diseño ergonómico para mayor comodidad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal5" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal5')">&times;</span>
+            <div class="product-detail">
+                <div class="product-detail-image">
+                    <img src="https://www.klipp.co/wp-content/uploads/2024/12/31239-8-png.webp" alt="Lapiz HB2">
+                </div>
+                <div class="product-detail-info">
+                    <h2>Lapiz HB2</h2>
+                    <div class="product-detail-price">$1.000</div>
+                    <div class="product-detail-description">
+                        <p>Detrás de cada gran logro académico, siempre hay un lápiz que nunca se rindió. Este lápiz HB2 ofrece el equilibrio perfecto entre dureza y oscuridad para todo tipo de escritura y dibujo.</p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h4>Características:</h4>
+                        <ul>
+                            <li>Dureza HB2 - equilibrio perfecto</li>
+                            <li>Mina resistente a la rotura</li>
+                            <li>Cuerpo de madera de alta calidad</li>
+                            <li>Acabado lacado para mayor durabilidad</li>
+                            <li>Incluye goma de borrar en el extremo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal6" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal6')">&times;</span>
+            <div class="product-detail">
+                <div class="product-detail-image">
+                    <img src="https://artecpanama.com/cdn/shop/products/milimetrada_1200x1200.jpg?v=1597676296" alt="Hojas milimetradas">
+                </div>
+                <div class="product-detail-info">
+                    <h2>Hojas milimetradas</h2>
+                    <div class="product-detail-price">$200</div>
+                    <div class="product-detail-description">
+                        <p>Realiza tus planos con precisión y facilidad. Estas hojas milimetradas son ideales para dibujo técnico, gráficos, esquemas y cualquier proyecto que requiera precisión.</p>
+                    </div>
+                    <div class="product-detail-features">
+                        <h4>Características:</h4>
+                        <ul>
+                            <li>Paquete de 50 hojas</li>
+                            <li>Tamaño carta (21.6 x 27.9 cm)</li>
+                            <li>Cuadrícula de 5x5 mm</li>
+                            <li>Papel de 80 g/m² de alta calidad</li>
+                            <li>Líneas de color azul claro para mejor visibilidad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <section id="categorias" class="categories">
         <div class="container">
             <div class="section-title">
@@ -445,36 +726,29 @@
             </div>
             
             <div class="categories-grid">
-                <!-- Categoría 1 -->
                 <div class="category-card">
                     <div class="category-icon">📜</div>
                     <h3>Papel</h3>
                 </div>
                 
-                <!-- Categoría 2 -->
                 <div class="category-card">
                     <div class="category-icon">🖋</div>
                     <h3>Boligrafos</h3>
                 </div>
                 
-                <!-- Categoría 3 -->
                 <div class="category-card">
                     <div class="category-icon">🖊</div>
                     <h3>Lapices</h3>
                 </div>
                 
-                <!-- Categoría 4 -->
                 <div class="category-card">
                     <div class="category-icon">📐</div>
                     <h3>Otros</h3>
-                </div>
-                
                 </div>
             </div>
         </div>
     </section>
     
-    <!-- Footer -->
     <footer id="contacto">
         <div class="container">
             <div class="footer-content">
@@ -496,8 +770,6 @@
                     <p>papelitos3b@gmail.com</p>
                     <p>+57 313 884 4055</p>
                 </div>
-                    </div>
-                </div>
             </div>
             
             <div class="copyright">
@@ -505,5 +777,27 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
